@@ -26,3 +26,8 @@
 defined('MOODLE_INTERNAL') || die();
 
 $string['pluginname'] = 'Course Panel';
+$string['course_panel:addinstance'] = 'Add a new Course Panel block';
+$string['course_panel:myaddinstance'] = 'Add a new Course Panel block to the My Moodle page';
+$string['startdate'] = 'Course start date: {$a}';
+$string['enddate'] = 'Course end date: {$a}';
+$string['dayslabel'] = 'Days remaining : {$a}';

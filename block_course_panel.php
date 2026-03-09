@@ -55,8 +55,34 @@ class block_course_panel extends block_base {
         if (!empty($this->config->text)) {
             $this->content->text = $this->config->text;
         } else {
-            $text = 'Please define the content text in /blocks/course_panel/block_course_panel.php.';
-            $this->content->text = $text;
+            global $OUTPUT, $USER, $DB, $COURSE;
+
+            //this section is for date also startdate and enddate, also calculate the remaining days to end of course.
+            $startdatelabel = get_string('startdate', 'block_course_panel', userdate($COURSE->startdate, get_string('strftimedatefullshort', 'langconfig')));
+            $enddatelabel = get_string('enddate', 'block_course_panel', userdate($COURSE->enddate, get_string('strftimedatefullshort', 'langconfig')));
+            $now = time();
+            $secondsremaining = $COURSE->enddate - $now;
+            $dayremaining = (int)($secondsremaining / DAYSECS);
+            $dayslabel = get_string('dayslabel', 'block_course_panel', $dayremaining);
+            $colors = '';
+            if ($dayremaining >= 30) {
+                $colors = 'success';
+            } else if ($dayremaining > 10) {
+                $colors = 'warning';
+            } else {
+                $colors = 'danger';
+            }
+            $coursedate = [
+                'fullname' => $COURSE->fullname,
+                'startdatelabel' => $startdatelabel,
+                'enddatelabel' => !empty($enddatelabel) ? $enddatelabel : get_string('noenddate', 'block_course_panel'),
+                'dayslabel' => $dayslabel,
+                'colors' => $colors,
+            ];
+            $template = [
+                'courses' => $coursedate, 
+                ];
+            $this->content->text = $OUTPUT->render_from_template('block_course_panel/main', $template);
         }
 
         return $this->content;
