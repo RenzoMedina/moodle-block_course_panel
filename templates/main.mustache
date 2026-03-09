@@ -15,16 +15,48 @@
 	along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 }}
 <div class="row">
-	{{#courses}}
+	{{#coursesinfo}}
 		<div class="col-md-12">
 		<h5 class="card-title">{{fullname}}</h5>
 		<p class="card-text mb-0"><span class="text-muted">{{startdatelabel}}</span></p>
+		{{#endate}}
 		<p class="card-text mb-0"><span class="text-muted">{{enddatelabel}}</span></p>
 		<p class="card-text mb-0"><span class="text-{{colors}} font-weight-bold">{{dayslabel}}</span></p>
+		{{/endate}}
+		{{^endate}}
+		<p class="card-text mb-0"><span class="text-muted">{{#str}}noenddate, block_course_panel{{/str}}</span></p>
+		{{/endate}}
 		</div>
-	{{/courses}}
-	{{^courses}}
+	{{/coursesinfo}}
+	{{^coursesinfo}}
 		<p class="blockquote text-muted text-center">{{#str}}nocourses, block_course_panel{{/str}}</p>
-	{{/courses}}
+	{{/coursesinfo}}
 </div>
 <hr>
+<div class="row">
+	<div class="col-md-12">
+		{{#isstudent}}
+		{{#progress}}
+		<p class="mb-0">{{#str}}labelpercentage, block_course_panel{{/str}}<span>{{percentage}}</span></p>
+		<div class="progress">
+			<div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="{{percentage}}" aria-valuemin="0" aria-valuemax="100" style="width: {{percentage}}%">{{percentage}}%</div>
+		</div>
+		{{/progress}}
+		{{^progress}}
+			<p class ="text-muted">{{messagefinish}}</p>
+		{{/progress}}
+		<p>{{#str}}labelactivitiesstudent, block_course_panel{{/str}}<span>{{activitiesstudent}}</span></p>
+		<pre>{{studentmesage}}</pre>
+		{{/isstudent}}
+
+		{{#isteacheradmin}}
+		<p>{{#str}}labelstudent, block_course_panel{{/str}}<span>{{countsutendts}}</span></p>
+		<p>{{#str}}labelaverage, block_course_panel{{/str}}<span>{{average}}</span></p>
+		<p>{{#str}}labelactivities, block_course_panel{{/str}}<span>{{activities}}</span></p>
+		{{/isteacheradmin}}
+
+		{{#isadmin}}
+		<p>{{#str}}labelactivitieshidden, block_course_panel{{/str}}<span>{{activitieshidden}}</span></p>
+		{{/isadmin}}
+	</div>
+</div>

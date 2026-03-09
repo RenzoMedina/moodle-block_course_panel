@@ -55,11 +55,12 @@ class block_course_panel extends block_base {
         if (!empty($this->config->text)) {
             $this->content->text = $this->config->text;
         } else {
-            global $OUTPUT, $USER, $DB, $COURSE;
+            global $OUTPUT, $COURSE, $USER;
 
             //this section is for date also startdate and enddate, also calculate the remaining days to end of course.
             $startdatelabel = get_string('startdate', 'block_course_panel', userdate($COURSE->startdate, get_string('strftimedatefullshort', 'langconfig')));
             $enddatelabel = get_string('enddate', 'block_course_panel', userdate($COURSE->enddate, get_string('strftimedatefullshort', 'langconfig')));
+            $enddate = $COURSE->enddate;
             $now = time();
             $secondsremaining = $COURSE->enddate - $now;
             $dayremaining = (int)($secondsremaining / DAYSECS);
@@ -79,8 +80,49 @@ class block_course_panel extends block_base {
                 'dayslabel' => $dayslabel,
                 'colors' => $colors,
             ];
+
+            //this section is for data student, teacher and admin
+            $completion = new completion_info($COURSE);
+            if(!$completion->is_enabled()) {
+                $this->content->text = $OUTPUT->render_from_template('block_course_panel/main', [
+                'progress' => false,
+                'message'  => get_string('completionnotenabled', 'block_course_panel'),
+            ]);
+                return $this->content;
+            }
+            $modinfo = get_fast_modinfo($COURSE);
+            $total = 0;
+            $completed = 0;
+            foreach ($modinfo->cms as $cm) {
+                if ($cm->completion == COMPLETION_TRACKING_NONE) {
+                    continue;
+                }
+                
+                $total++;
+                
+                $details = \core_completion\cm_completion_details::get_instance(
+                    $cm,
+                    $USER->id,
+                    true
+                );
+                
+                if ($details->is_overall_complete()) {
+                    $completed++;
+                }
+            }
+            $percentage = $total > 0 ? round(($completed / $total) * 100) : 0;
+            $isstudent = is_enrolled(context_course::instance($COURSE->id), $USER->id, 'student');
+            $context = \context_course::instance($COURSE->id);
+            $isteacher = has_capability('moodle/grade:viewall', $context);
+            $isadmin = has_capability('moodle/site:config', context_system::instance());
             $template = [
-                'courses' => $coursedate, 
+                'coursesinfo' => $coursedate,
+                'endate' => !empty($enddate),
+                'isstudent' => !$isteacher && !$isadmin,
+                'isteacheradmin' => $isadmin || $isteacher,
+                "isadmin" => $isadmin,
+                'progress' => true,
+                'percentage' => $percentage,
                 ];
             $this->content->text = $OUTPUT->render_from_template('block_course_panel/main', $template);
         }
