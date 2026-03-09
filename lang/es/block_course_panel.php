@@ -15,17 +15,14 @@
 // along with Moodle.  If not, see <https://www.gnu.org/licenses/>.
 
 /**
- * Plugin version and other meta-data are defined here.
+ * Plugin strings are defined here.
  *
  * @package     block_course_panel
+ * @category    string
  * @copyright   2026 Renzo Medina <medinast30@gmail.com>
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->component = 'block_course_panel';
-$plugin->release = '0.1.0';
-$plugin->version = 2026030801;
-$plugin->requires = 2022112800;
-$plugin->maturity = MATURITY_ALPHA;
+$string['pluginname'] = 'Panel del curso';

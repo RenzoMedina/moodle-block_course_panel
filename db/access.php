@@ -27,8 +27,8 @@ defined('MOODLE_INTERNAL') || die();
 
 $capabilities = [
 
-    'block/course_panel:block/course_panel:addinstance' => [
-        'riskbitmask' => ISK_SPAM | RISK_XSS,
+    'block/course_panel:addinstance' => [
+        'riskbitmask' => RISK_SPAM | RISK_XSS,
         'captype' => 'write',
         'contextlevel' => CONTEXT_BLOCK,
         'archetypes' => [
@@ -37,11 +37,12 @@ $capabilities = [
         'clonepermissionsfrom' => 'moodle/site:manageblocks',
     ],
 
-    'block/course_panel:block/course_panel:myaddinstance' => [
+    'block/course_panel:myaddinstance' => [
         'captype' => 'write',
         'contextlevel' => CONTEXT_SYSTEM,
         'archetypes' => [
             'manager' => CAP_ALLOW,
         ],
+    'clonepermissionsfrom' => 'moodle/site:manageblocks',
     ],
 ];

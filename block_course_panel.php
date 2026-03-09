@@ -93,6 +93,14 @@ class block_course_panel extends block_base {
      */
     public function applicable_formats() {
         return [
+            'course-view' => true,
         ];
+    }
+    /**
+     * Performs a self-test to check if the block is working correctly.
+     * @return bool
+     */
+    function _self_test() {
+        return true;
     }
 }
