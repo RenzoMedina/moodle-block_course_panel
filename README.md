@@ -1,6 +1,6 @@
 # Course Panel #
 
-TO-DO Describe the plugin shortly here.
+I am an academic coordinator and I need a block that gives me a quick overview of the status of a course without having to navigate through several menus. I want to see the most relevant information about the current course in one place so I can make quick decisions.
 
 TO-DO Provide more detailed description here.
 

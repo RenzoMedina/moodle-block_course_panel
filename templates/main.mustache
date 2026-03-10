@@ -29,7 +29,9 @@
 		</div>
 	{{/coursesinfo}}
 	{{^coursesinfo}}
+	<div class="col-md-12">
 		<p class="blockquote text-muted text-center">{{#str}}nocourses, block_course_panel{{/str}}</p>
+	</div>
 	{{/coursesinfo}}
 </div>
 <hr>
@@ -37,16 +39,21 @@
 	<div class="col-md-12">
 		{{#isstudent}}
 		{{#progress}}
-		<p class="mb-0">{{#str}}labelpercentage, block_course_panel{{/str}}<span>{{percentage}}</span></p>
-		<div class="progress">
+		<p class="mb-0">{{#str}}labelpercentage, block_course_panel{{/str}}</p>
+		<div class="progress mb-2">
 			<div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="{{percentage}}" aria-valuemin="0" aria-valuemax="100" style="width: {{percentage}}%">{{percentage}}%</div>
 		</div>
 		{{/progress}}
-		{{^progress}}
+		{{#finish}}
 			<p class ="text-muted">{{messagefinish}}</p>
-		{{/progress}}
-		<p>{{#str}}labelactivitiesstudent, block_course_panel{{/str}}<span>{{activitiesstudent}}</span></p>
-		<pre>{{studentmesage}}</pre>
+		{{/finish}}
+		{{#isactivities}}
+		<p><span> {{activitiesstudent}} </span></p>
+		{{/isactivities}}
+		{{^isactivities}}
+		<p class ="text-muted">{{#str}}messageactivities,  block_course_panel{{/str}}</p>
+		{{/isactivities}}
+		<p class="text-muted text-sm"><small>{{studentmessage}}</small></p>
 		{{/isstudent}}
 
 		{{#isteacheradmin}}

@@ -111,18 +111,34 @@ class block_course_panel extends block_base {
                 }
             }
             $percentage = $total > 0 ? round(($completed / $total) * 100) : 0;
-            $isstudent = is_enrolled(context_course::instance($COURSE->id), $USER->id, 'student');
+            $messagestudent = !empty($this->config->messagestudent['text']) ? $this->config->messagestudent['text'] : get_string('defaultmessage', 'block_course_panel');
+            $timestart = time();
+            $dayremaining = isset($this->config->valueactivities) ? $this->config->valueactivities : 7;
+            $timeend = $timestart + ((int)$dayremaining * DAYSECS);
+            $coursefilter = [$COURSE->id];
+            $events = \core_calendar\local\api::get_events(null, null, $timestart,$timeend, null, null, 20, null, null, null, $coursefilter);
+            $activitiesstudents = count($events);
+            $activitiesstudentslabel = get_string('activitiesstudent', 'block_course_panel',$activitiesstudents);
+
+            // this a section for teacher and admin, also calculate the average of completion of students, also calculate the total of activities and hidden activities.
             $context = \context_course::instance($COURSE->id);
             $isteacher = has_capability('moodle/grade:viewall', $context);
             $isadmin = has_capability('moodle/site:config', context_system::instance());
+
+            //this a section data of template
             $template = [
                 'coursesinfo' => $coursedate,
                 'endate' => !empty($enddate),
                 'isstudent' => !$isteacher && !$isadmin,
                 'isteacheradmin' => $isadmin || $isteacher,
                 "isadmin" => $isadmin,
-                'progress' => true,
+                'progress' => $percentage < 100,
+                'finish' => $percentage >= 100,
+                'messagefinish' => get_string('messagefinish', 'block_course_panel'),
                 'percentage' => $percentage,
+                'studentmessage' => $messagestudent,
+                'isactivities' => $activitiesstudents > 1,
+                'activitiesstudent' => $activitiesstudentslabel,   
                 ];
             $this->content->text = $OUTPUT->render_from_template('block_course_panel/main', $template);
         }

@@ -35,5 +35,18 @@ class block_course_panel_edit_form extends block_edit_form {
 
         // Please keep in mind that all elements defined here must start with 'config_'.
 
+        $mform->addElement('select',  'config_valueactivities',  get_string('labelvalueactivities', 'block_course_panel'),[
+            7 => get_string('seven', 'block_course_panel'),
+            14 => get_string('fourteen', 'block_course_panel'),
+            21 => get_string('twentyone', 'block_course_panel'),
+            28 => get_string('twentyeight', 'block_course_panel'),
+        ]);
+        $mform->addHelpButton('config_valueactivities', 'labelvalueactivities', 'block_course_panel');
+        $mform->setDefault('config_valueactivities', 7);
+
+        // Text field for the message to students.
+        $mform->addElement('editor',  'config_messagestudent',  get_string('labeltext', 'block_course_panel'));
+        $mform->setType('config_messagestudent', PARAM_TEXT);
+        $mform->addHelpButton('config_messagestudent', 'labeltext', 'block_course_panel');
     }
 }
