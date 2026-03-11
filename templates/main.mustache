@@ -57,13 +57,42 @@
 		{{/isstudent}}
 
 		{{#isteacheradmin}}
-		<p>{{#str}}labelstudent, block_course_panel{{/str}}<span>{{countsutendts}}</span></p>
-		<p>{{#str}}labelaverage, block_course_panel{{/str}}<span>{{average}}</span></p>
-		<p>{{#str}}labelactivities, block_course_panel{{/str}}<span>{{activities}}</span></p>
+		<div class="row">
+			<div class="col-md-9">
+				<p class="mb-0">{{#str}}labelstudent, block_course_panel{{/str}}</p>
+			</div>
+			<div class="col-md-3">
+				<p class="mb-0 text-center">{{countsutendts}}</span></p>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-9">
+				<p class="mb-0">{{#str}}labelaverage, block_course_panel{{/str}}</p>
+			</div>
+			<div class="col-md-3">
+				<p class="mb-0 text-center"><span>{{average}}%</span></p>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-9">
+				<p class="mb-0">{{#str}}labelactivities, block_course_panel{{/str}}</p>
+			</div>
+			<div class="col-md-3">
+				<p class="mb-0 text-center"><span>{{activities}}</span></p>
+			</div>
+		</div>
 		{{/isteacheradmin}}
 
 		{{#isadmin}}
-		<p>{{#str}}labelactivitieshidden, block_course_panel{{/str}}<span>{{activitieshidden}}</span></p>
+		<div class="row">
+			<div class="col-md-9">
+				<p>{{#str}}labelactivitieshidden, block_course_panel{{/str}}</p>
+			</div>
+			<div class="col-md-3">
+				<p class="text-center"><span>{{activitieshidden}}</span></p>
+			</div>
+		</div>
 		{{/isadmin}}
+		
 	</div>
 </div>

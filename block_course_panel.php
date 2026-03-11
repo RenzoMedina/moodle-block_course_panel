@@ -125,27 +125,67 @@ class block_course_panel extends block_base {
             $isteacher = has_capability('moodle/grade:viewall', $context);
             $isadmin = has_capability('moodle/site:config', context_system::instance());
 
+            //this section is for calculate the average of completion of students
+            $studentsactive = count_enrolled_users($context, 'moodle/course:isincompletionreports');
+            $averagecompletion = 0;
+            $groupaverage = 0;
+            $liststudents = get_enrolled_users($context, 'moodle/course:isincompletionreports');
+            $totalstudents = 0;
+            foreach ($liststudents as $student) {
+                $studencompleted = 0;
+                foreach ($modinfo->cms as $cm) {
+                    if ($cm->completion == COMPLETION_TRACKING_NONE) {
+                        continue;
+                    }
+                    $details = \core_completion\cm_completion_details::get_instance(
+                        $cm,
+                        $student->id,
+                        true
+                    );
+                    if ($details->is_overall_complete()) {
+                        $studencompleted++;
+                }
+                
+                }
+            $average = $total > 0 ? round(($studencompleted / $total) * 100) : 0;
+            $averagecompletion += $average;
+            $totalstudents++;
+        }
+            $groupaverage = $totalstudents > 0 ? round($averagecompletion / $totalstudents) : 0;
+            
+            //this section is for calculate the total of hidden activities
+            $activitieshidden = 0;
+            foreach ($modinfo->cms as $cm) {
+                if ($cm->visible) {
+                    continue;
+                    }
+                $activitieshidden++;
+            }
+
             //this a section data of template
             $template = [
                 'coursesinfo' => $coursedate,
                 'endate' => !empty($enddate),
                 'isstudent' => !$isteacher && !$isadmin,
                 'isteacheradmin' => $isadmin || $isteacher,
-                "isadmin" => $isadmin,
+                'isadmin' => $isadmin,
                 'progress' => $percentage < 100,
                 'finish' => $percentage >= 100,
                 'messagefinish' => get_string('messagefinish', 'block_course_panel'),
                 'percentage' => $percentage,
                 'studentmessage' => $messagestudent,
                 'isactivities' => $activitiesstudents > 1,
-                'activitiesstudent' => $activitiesstudentslabel,   
+                'activitiesstudent' => $activitiesstudentslabel,
+                'countsutendts' => $studentsactive,
+                'average' => $groupaverage,
+                'activities' => $activitiesstudents > 1,
+                'activitieshidden' => $activitieshidden > 1 ? $activitieshidden : 0,
                 ];
             $this->content->text = $OUTPUT->render_from_template('block_course_panel/main', $template);
         }
 
         return $this->content;
     }
-
     /**
      * Defines configuration data.
      *
