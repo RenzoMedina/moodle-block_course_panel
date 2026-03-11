@@ -2,7 +2,37 @@
 
 I am an academic coordinator and I need a block that gives me a quick overview of the status of a course without having to navigate through several menus. I want to see the most relevant information about the current course in one place so I can make quick decisions.
 
-TO-DO Provide more detailed description here.
+## Features ##
+
+The block must display different sections depending on the user's role: 
+
+### All roles ###
+- Course name 
+- Course start and end dates 
+- Days remaining (colored according to proximity, as in Challenge 3) 
+- If the course has no end date, display a corresponding message
+
+### Student ###
+
+- Their percentage of progress in the course (as in Challenge 4) 
+- Number of activities due in the next 7 days 
+- A motivational message that can be configured in the block settings
+
+### Teacher ###
+
+- Total number of students enrolled in the course 
+- Average progress of the group 
+- Number of activities with a due date in the next 7 days
+
+### Admin ###
+
+- Everything the teacher sees 
+- Number of hidden activities in the course
+
+### Block settings ###
+- The administrator can enable or disable each section separately
+- The motivational message for students is configurable
+- The administrator can define how many days are considered “upcoming” for activities (default is 7)
 
 ## Installing via uploaded ZIP file ##
 
