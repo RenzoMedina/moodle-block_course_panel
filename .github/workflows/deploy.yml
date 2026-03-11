@@ -38,11 +38,11 @@ jobs:
           echo "Creando ZIP para: ${{ env.PLUGIN_NAME }}"
           cd /tmp/build
           zip -r ${{ env.PLUGIN_NAME }}.zip course_panel
-          mv ${{ env.PLUGIN_NAME }}.zip ${GITHUB_WORKSPACE}/
+          mv ${{ env.PLUGIN_NAME }}.zip ${GITHUB_WORKSPACE}/${{ env.PLUGIN_NAME }}-${{ env.DEPLOY_TIME }}.zip
           cd ${GITHUB_WORKSPACE}
           echo "ZIP creado correctamente"
-          ls -lh ${{ env.PLUGIN_NAME }}.zip
-          unzip -l ${{ env.PLUGIN_NAME }}.zip | head -20
+          ls -lh ${{ env.PLUGIN_NAME }}-${{ env.DEPLOY_TIME }}.zip
+          unzip -l ${{ env.PLUGIN_NAME }}-${{ env.DEPLOY_TIME }}.zip | head -20
       
       - name: Show time to deploy
         run: echo "DEPLOY_TIME=$(date -u +'%Y%m%d%H%M')" >> $GITHUB_ENV
@@ -52,5 +52,6 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: ${{ env.PLUGIN_NAME }}-${{ env.DEPLOY_TIME }}
-          path: "${{ env.PLUGIN_NAME }}.zip"
+          path: "${{ env.PLUGIN_NAME }}-${{ env.DEPLOY_TIME }}.zip"
+          compression-level: 0
           retention-days: 30
