@@ -57,9 +57,12 @@ class block_course_panel extends block_base {
         } else {
             global $OUTPUT, $COURSE, $USER;
 
-            //this section is for date also startdate and enddate, also calculate the remaining days to end of course.
-            $startdatelabel = get_string('startdate', 'block_course_panel', userdate($COURSE->startdate, get_string('strftimedatefullshort', 'langconfig')));
-            $enddatelabel = get_string('enddate', 'block_course_panel', userdate($COURSE->enddate, get_string('strftimedatefullshort', 'langconfig')));
+            /* This section is for date also startdate and enddate,
+            also calculate the remaining days to end of course.*/
+            $startdatelabel = get_string('startdate', 'block_course_panel',
+            userdate($COURSE->startdate, get_string('strftimedatefullshort', 'langconfig')));
+            $enddatelabel = get_string('enddate', 'block_course_panel', 
+            userdate($COURSE->enddate, get_string('strftimedatefullshort', 'langconfig')));
             $enddate = $COURSE->enddate;
             $now = time();
             $secondsremaining = $COURSE->enddate - $now;
@@ -76,7 +79,8 @@ class block_course_panel extends block_base {
             $coursedate = [
                 'fullname' => $COURSE->fullname,
                 'startdatelabel' => $startdatelabel,
-                'enddatelabel' => !empty($enddatelabel) ? $enddatelabel : get_string('noenddate', 'block_course_panel'),
+                'enddatelabel' => !empty($enddatelabel) ? $enddatelabel : 
+                get_string('noenddate', 'block_course_panel'),
                 'dayslabel' => $dayslabel,
                 'colors' => $colors,
             ];
@@ -111,21 +115,25 @@ class block_course_panel extends block_base {
                 }
             }
             $percentage = $total > 0 ? round(($completed / $total) * 100) : 0;
-            $messagestudent = !empty($this->config->messagestudent['text']) ? $this->config->messagestudent['text'] : get_string('defaultmessage', 'block_course_panel');
+            $messagestudent = !empty($this->config->messagestudent['text']) 
+            ? $this->config->messagestudent['text'] : get_string('defaultmessage', 'block_course_panel');
             $timestart = time();
             $dayremaining = isset($this->config->valueactivities) ? $this->config->valueactivities : 7;
             $timeend = $timestart + ((int)$dayremaining * DAYSECS);
             $coursefilter = [$COURSE->id];
-            $events = \core_calendar\local\api::get_events(null, null, $timestart,$timeend, null, null, 20, null, null, null, $coursefilter);
+            $events = \core_calendar\local\api::get_events(
+                null, null, $timestart,$timeend, null, null, 20, null, null, null, $coursefilter
+                );
             $activitiesstudents = count($events);
             $activitiesstudentslabel = get_string('activitiesstudent', 'block_course_panel',$activitiesstudents);
 
-            // this a section for teacher and admin, also calculate the average of completion of students, also calculate the total of activities and hidden activities.
+            /*t This a section for teacher and admin, also calculate the average of completion of 
+            students, also calculate the total of activities and hidden activities.*/
             $context = \context_course::instance($COURSE->id);
             $isteacher = has_capability('moodle/grade:viewall', $context);
             $isadmin = has_capability('moodle/site:config', context_system::instance());
 
-            //this section is for calculate the average of completion of students
+            //This section is for calculate the average of completion of students
             $studentsactive = count_enrolled_users($context, 'moodle/course:isincompletionreports');
             $averagecompletion = 0;
             $groupaverage = 0;
