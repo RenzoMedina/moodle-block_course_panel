@@ -18,6 +18,9 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
       
+      - name: Show time to deploy
+        run: echo "DEPLOY_TIME=$(date -u +'%Y%m%d%H%M')" >> $GITHUB_ENV
+      
       - name: Prepare file of plugin
         run: |
           echo "Limpiando los archivo inncesesarios..."
@@ -32,7 +35,7 @@ jobs:
               --exclude ".DS_Store" \
               ./ /tmp/build/course_panel/
             ls -la /tmp/build/course_panel
-
+      
       - name: Create ZIP for Moodle
         run: |
           echo "Creando ZIP para: ${{ env.PLUGIN_NAME }}"
@@ -43,9 +46,6 @@ jobs:
           echo "ZIP creado correctamente"
           ls -lh ${{ env.PLUGIN_NAME }}-${{ env.DEPLOY_TIME }}.zip
           unzip -l ${{ env.PLUGIN_NAME }}-${{ env.DEPLOY_TIME }}.zip | head -20
-      
-      - name: Show time to deploy
-        run: echo "DEPLOY_TIME=$(date -u +'%Y%m%d%H%M')" >> $GITHUB_ENV
 
       - name: Upload artifact
         # if: github.event_name == 'workflow_dispatch'
