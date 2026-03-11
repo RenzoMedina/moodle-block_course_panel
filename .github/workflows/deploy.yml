@@ -16,7 +16,9 @@ jobs:
 
     steps:
       - name: Checkout repository
+        # this version now v5
         uses: actions/checkout@v5
+
       
       - name: Show time to deploy
         run: echo "DEPLOY_TIME=$(date -u +'%Y%m%d%H%M')" >> $GITHUB_ENV
