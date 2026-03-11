@@ -1,0 +1,52 @@
+name: Deploy Plugin
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+env:
+  PLUGIN_NAME: 'blocks_course_panel'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      
+      - name: Prepare file of plugin
+        run: |
+          echo "Limpiando los archivo inncesesarios..."
+            rm -rf /tmp/build
+            mkdir -p /tmp/build/course_panel
+            rsync -a \
+              --exclude .git \
+              --exclude .github \
+              --exclude .gitignore \
+              --exclude tests \
+              --exclude .vscode \
+              --exclude ".DS_Store" \
+              ./ /tmp/build/course_panel/
+            ls -la /tmp/build/course_panel
+
+      - name: Create ZIP for Moodle
+        run: |
+          echo "Creando ZIP para: ${{ env.PLUGIN_NAME }}"
+          cd /tmp/build
+          zip -r ${{ env.PLUGIN_NAME }}.zip course_panel
+          mv ${{ env.PLUGIN_NAME }}.zip ${GITHUB_WORKSPACE}/
+          cd ${GITHUB_WORKSPACE}
+          echo "ZIP creado correctamente"
+          ls -lh ${{ env.PLUGIN_NAME }}.zip
+          unzip -l ${{ env.PLUGIN_NAME }}.zip | head -20
+        
+      - name: Upload artifact
+        if: github.event_name == 'workflow_dispatch'
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ env.PLUGIN_NAME }}-${{ github.run_number }}
+          path: "${{ env.PLUGIN_NAME }}.zip"
+          retention-days: 30
